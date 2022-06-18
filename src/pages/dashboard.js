@@ -1,18 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { contextContainer } from '../App'
+
 import Cookies from 'js-cookie'
 
 import { doc, getDoc } from 'firebase/firestore'
 import { FIRESTORE } from '../server/config/firebase'
 import CreateQuestion from '../component/CreateQuestion'
 import AdminLayout from '../layout/AdminLayout'
+import { Spin } from 'antd'
 
 const Dashboard = () => {
+  const context = useContext(contextContainer)
+
   const navigate = useNavigate()
   let uuid = Cookies.get('uuid')
 
   const [pageLoading, setPageLoading] = useState(true)
-  const [userType, setUserType] = useState(undefined)
 
   const autheticate = async () => {
     const docRef = doc(FIRESTORE, 'users', uuid)
@@ -20,7 +25,8 @@ const Dashboard = () => {
 
     if (docSnap.exists()) {
       setPageLoading(false)
-      setUserType(docSnap.data().type)
+      context.setIsAuthenticated(true)
+      context.setUserType(docSnap.data().type)
     } else {
       navigate('/login', { replace: true })
     }
@@ -39,7 +45,7 @@ const Dashboard = () => {
     <div>
       {!pageLoading ? (
         <>
-          {userType === 'admin' ? (
+          {context.userType === 'admin' ? (
             <AdminLayout>
               <CreateQuestion />
             </AdminLayout>
@@ -48,7 +54,10 @@ const Dashboard = () => {
           )}
         </>
       ) : (
-        <>Loading</>
+        <div className='flex justify-center items-center flex-col h-screen'>
+          <Spin size='large' />
+          <p>Loading...</p>
+        </div>
       )}
     </div>
   )

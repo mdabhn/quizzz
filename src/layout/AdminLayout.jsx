@@ -10,7 +10,7 @@ const AdminLayout = ({ children }) => {
         <nav>
           <ul className='flex justify-end'>
             <Link
-              to={'/allquestions'}
+              to={'/dashboard'}
               className={`ml-2 p-2 hover:cursor-pointer ${
                 pathname === '/dashboard' && 'underline text-white'
               }`}
@@ -18,7 +18,7 @@ const AdminLayout = ({ children }) => {
               Home
             </Link>
             <Link
-              to={'/allquestions'}
+              to={'/questions'}
               className={`ml-2 p-2 hover:cursor-pointer ${
                 pathname === '/questions' && 'underline text-white'
               }`}
