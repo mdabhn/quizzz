@@ -4,6 +4,8 @@ import Cookies from 'js-cookie'
 
 import { doc, getDoc } from 'firebase/firestore'
 import { FIRESTORE } from '../server/config/firebase'
+import CreateQuestion from '../component/CreateQuestion'
+import AdminLayout from '../layout/AdminLayout'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -36,7 +38,15 @@ const Dashboard = () => {
   return (
     <div>
       {!pageLoading ? (
-        <>{userType === 'admin' ? <>ADMIN</> : <>USERS</>}</>
+        <>
+          {userType === 'admin' ? (
+            <AdminLayout>
+              <CreateQuestion />
+            </AdminLayout>
+          ) : (
+            <>USERS</>
+          )}
+        </>
       ) : (
         <>Loading</>
       )}
