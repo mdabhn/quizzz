@@ -20,7 +20,7 @@ const AdminLayout = ({ children }) => {
             <Link
               to={'/allquestions'}
               className={`ml-2 p-2 hover:cursor-pointer ${
-                pathname === '/' && 'underline text-white'
+                pathname === '/questions' && 'underline text-white'
               }`}
             >
               All Questions
