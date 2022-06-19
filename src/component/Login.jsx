@@ -41,7 +41,9 @@ const Login = () => {
 
   useEffect(() => {
     if (uuid === undefined) {
+      console.log('--')
       navigate('/login', { replace: true })
+      setPageLoading(false)
     } else {
       autheticate()
     }

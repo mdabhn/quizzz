@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 const AdminLayout = ({ children }) => {
   const location = useLocation()
@@ -43,6 +44,9 @@ const AdminLayout = ({ children }) => {
             </Link>
             <Link
               to={'/'}
+              onClick={() => {
+                Cookies.remove('uuid')
+              }}
               className='ml-2 text-red-700 border-2 border-red-800 p-2 hover:cursor-pointer'
             >
               LOGOUT
