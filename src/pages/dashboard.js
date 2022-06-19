@@ -10,6 +10,7 @@ import { FIRESTORE } from '../server/config/firebase'
 import CreateQuestion from '../component/CreateQuestion'
 import AdminLayout from '../layout/AdminLayout'
 import { Spin } from 'antd'
+import UserLayout from '../layout/UserLayout'
 
 const Dashboard = () => {
   const context = useContext(contextContainer)
@@ -50,7 +51,7 @@ const Dashboard = () => {
               <CreateQuestion />
             </AdminLayout>
           ) : (
-            <>USERS</>
+            <UserLayout>USERS</UserLayout>
           )}
         </>
       ) : (
