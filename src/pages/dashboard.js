@@ -11,6 +11,7 @@ import CreateQuestion from '../component/CreateQuestion'
 import AdminLayout from '../layout/AdminLayout'
 import { Spin } from 'antd'
 import UserLayout from '../layout/UserLayout'
+import Answers from '../component/Answers'
 
 const Dashboard = () => {
   const context = useContext(contextContainer)
@@ -51,7 +52,9 @@ const Dashboard = () => {
               <CreateQuestion />
             </AdminLayout>
           ) : (
-            <UserLayout>USERS</UserLayout>
+            <UserLayout>
+              <Answers />
+            </UserLayout>
           )}
         </>
       ) : (
