@@ -28,7 +28,7 @@ const AdminLayout = ({ children }) => {
             <Link
               to={'/archived'}
               className={`ml-2 p-2 hover:cursor-pointer ${
-                pathname === '/' && 'underline text-white'
+                pathname === '/archived' && 'underline text-white'
               }`}
             >
               Archived

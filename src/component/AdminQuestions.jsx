@@ -60,8 +60,9 @@ const AdminQuestions = () => {
 
   const onChange = (key) => {}
 
-  const removeQuestion = async ({ id }) => {
+  const removeQuestion = async (id) => {
     setQuestions(questions.filter((data) => data.id !== id))
+
     const docRef = doc(FIRESTORE, 'questions', id)
 
     await updateDoc(docRef, {
