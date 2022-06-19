@@ -36,15 +36,37 @@ const ArchivedQuestions = () => {
     message.success('Restored')
   }
 
+  const deletePermanently = async (id) => {
+    setLoading(true)
+    const docRef = doc(FIRESTORE, 'questions', id)
+
+    await updateDoc(docRef, {
+      deleted: true,
+    })
+
+    setQuestions(questions.filter((data) => data.id !== id))
+    setLoading(false)
+
+    message.success('Deleted Permanently')
+  }
+
   const Options = ({ id }) => {
     return (
       <>
         <Button
-          className='text-yellow-900 ml-1'
+          className='text-yellow-900 ml-1 hover:bg-green-800 hover:text-white'
           onClick={() => bringBack(id)}
           loading={loading}
         >
           Restore
+        </Button>
+
+        <Button
+          className='text-red-900 ml-1 hover:bg-red-800 hover:text-white'
+          onClick={() => deletePermanently(id)}
+          loading={loading}
+        >
+          Delete Permanently
         </Button>
       </>
     )
@@ -53,7 +75,8 @@ const ArchivedQuestions = () => {
   const fetchData = async () => {
     const Q = query(
       collection(FIRESTORE, 'questions'),
-      where('archived', '==', true)
+      where('archived', '==', true),
+      where('deleted', '==', false)
     )
 
     const querySnapshot = await getDocs(Q)

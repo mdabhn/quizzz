@@ -77,6 +77,7 @@ const CreateQuestion = () => {
         question: question,
         option: [...choices],
         archived: false,
+        deleted: false,
       })
         .then(() => {
           message.success('Successfully Created')

@@ -38,7 +38,8 @@ const AdminQuestions = () => {
   const fetchData = async () => {
     const Q = query(
       collection(FIRESTORE, 'questions'),
-      where('archived', '==', false)
+      where('archived', '==', false),
+      where('deleted', '==', false)
     )
 
     const querySnapshot = await getDocs(Q)
@@ -61,14 +62,15 @@ const AdminQuestions = () => {
   const onChange = (key) => {}
 
   const removeQuestion = async (id) => {
-    setQuestions(questions.filter((data) => data.id !== id))
-
+    setLoading(true)
     const docRef = doc(FIRESTORE, 'questions', id)
 
     await updateDoc(docRef, {
       archived: true,
     })
 
+    setQuestions(questions.filter((data) => data.id !== id))
+    setLoading(false)
     message.success('Deleted')
   }
 
@@ -86,6 +88,7 @@ const AdminQuestions = () => {
         <Button
           className='text-red-900 ml-1'
           onClick={() => removeQuestion(id)}
+          loading={loading}
         >
           Delete
         </Button>
