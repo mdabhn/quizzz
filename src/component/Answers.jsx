@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 
 import { FIRESTORE } from '../server/config/firebase'
-import { Button, Radio, Space, Spin } from 'antd'
+import { Button, Spin } from 'antd'
 
 const Answers = () => {
   const [questions, setQuestions] = useState([])
+  const [answers, setAnswers] = useState([])
   const [pageLoading, setPageLoading] = useState(true)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
 
@@ -20,6 +21,7 @@ const Answers = () => {
     const querySnapshot = await getDocs(Q)
 
     let data = []
+    let answersArr = []
 
     if (!querySnapshot.empty) {
       querySnapshot.forEach((doc) => {
@@ -27,12 +29,23 @@ const Answers = () => {
           id: doc.id,
           ...doc.data(),
         })
+        answersArr.push({
+          id: doc.id,
+          ansId: null,
+        })
       })
       setQuestions(data)
+      setAnswers(answersArr)
     }
 
     setPageLoading(false)
   }
+
+  useEffect(() => {
+    if (localStorage.getItem('answers') !== null) {
+      setAnswers(JSON.parse(localStorage.getItem('answers')))
+    }
+  }, [questions])
 
   useEffect(() => {
     fetchData()
@@ -68,17 +81,31 @@ const Answers = () => {
               </p>
 
               <p className='font-medium mt-2'>Options</p>
-              <Radio.Group
-                defaultValue={questions[currentQuestionIndex].option[0].id}
-              >
-                <Space direction='vertical'>
-                  {questions[currentQuestionIndex].option.map((data) => (
-                    <Radio key={data.id} value={data.id}>
-                      {data.name}
-                    </Radio>
-                  ))}
-                </Space>
-              </Radio.Group>
+
+              {questions[currentQuestionIndex].option.map((opt) => (
+                <div
+                  className={`border-2 p-2 m-2 border-teal-800 hover:cursor-pointer ${
+                    opt.id === answers[currentQuestionIndex].ansId &&
+                    'bg-green-700 text-white'
+                  }`}
+                  key={opt.id}
+                  onClick={() => {
+                    setAnswers(
+                      answers.map((ans) => {
+                        if (ans.id === answers[currentQuestionIndex].id) {
+                          ans.ansId = opt.id
+                        }
+                        return ans
+                      })
+                    )
+
+                    localStorage.setItem('answers', JSON.stringify(answers))
+                  }}
+                >
+                  {opt.name}
+                </div>
+              ))}
+
               <div className='flex justify-end'>
                 {currentQuestionIndex === questions.length - 1 ? (
                   <>
