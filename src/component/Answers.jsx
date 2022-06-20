@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
-
 import { collection, query, where, getDocs } from 'firebase/firestore'
-
-import { FIRESTORE } from '../server/config/firebase'
 import { Button, Spin } from 'antd'
+import { FIRESTORE } from '../server/config/firebase'
+import Result from './Result'
 
 const Answers = () => {
   const [questions, setQuestions] = useState([])
   const [answers, setAnswers] = useState([])
   const [pageLoading, setPageLoading] = useState(true)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [checkResultFlag, setCheckResultFlag] = useState(false)
+  const [correctAns, setCorrectAns] = useState(0)
 
   const fetchData = async () => {
     const Q = query(
@@ -41,6 +42,26 @@ const Answers = () => {
     setPageLoading(false)
   }
 
+  const checkResult = async () => {
+    setCheckResultFlag(true)
+    localStorage.removeItem('answers')
+    let rightAns = 0
+
+    questions.map((q, i) => {
+      q.option.map((opt) => {
+        if (answers[i].ansId === opt.id) {
+          if (opt.isTrue === true) {
+            rightAns += 1
+          }
+        }
+        return rightAns
+      })
+      return q
+    })
+
+    setCorrectAns(rightAns)
+  }
+
   useEffect(() => {
     if (localStorage.getItem('answers') !== null) {
       setAnswers(JSON.parse(localStorage.getItem('answers')))
@@ -63,6 +84,15 @@ const Answers = () => {
         <div className='flex justify-center items-center flex-col h-screen'>
           <p>No Question Available</p>
         </div>
+      ) : checkResultFlag ? (
+        <>
+          <Result
+            totaQuestion={questions.length}
+            correctAns={correctAns}
+            setCheckResultFlag={setCheckResultFlag}
+            setCurrentQuestionIndex={setCurrentQuestionIndex}
+          />
+        </>
       ) : (
         <div className='flex items-center flex-col h-screen mt-24'>
           <p className='font-bold text-2xl'>
@@ -117,7 +147,12 @@ const Answers = () => {
                     >
                       Back
                     </Button>
-                    <Button className='mt-2 w-32 ml-2'>Check Result</Button>
+                    <Button
+                      className='mt-2 w-32 ml-2'
+                      onClick={() => checkResult()}
+                    >
+                      Check Result
+                    </Button>
                   </>
                 ) : (
                   <Button
