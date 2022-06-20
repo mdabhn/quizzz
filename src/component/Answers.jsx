@@ -155,14 +155,24 @@ const Answers = () => {
                     </Button>
                   </>
                 ) : (
-                  <Button
-                    className='mt-2 w-32'
-                    onClick={() => {
-                      setCurrentQuestionIndex((ix) => ix + 1)
-                    }}
-                  >
-                    Next
-                  </Button>
+                  <>
+                    <Button
+                      className='mt-2 w-32'
+                      onClick={() => {
+                        setCurrentQuestionIndex((ix) => ix - 1)
+                      }}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      className='mt-2 w-32'
+                      onClick={() => {
+                        setCurrentQuestionIndex((ix) => ix + 1)
+                      }}
+                    >
+                      Next
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
